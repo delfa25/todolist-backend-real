@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libzip-dev \
-    nginx \
-    supervisor \
+    apache2 \
+    libapache2-mod-fcgid \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Install Composer
@@ -26,23 +26,21 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+# Apache configuration
+COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite
+RUN a2enmod proxy_fcgi
+RUN a2enmod setenvif
+RUN a2ensite 000-default.conf
+RUN service apache2 restart
+
 # Set permissions
 RUN chown -R www-data:www-data /workspace \
     && chmod -R 755 /workspace/storage \
     && chmod -R 755 /workspace/bootstrap/cache
 
-# Nginx configuration
-RUN mkdir -p docker/nginx # Créer le dossier si non existant
-COPY docker/nginx/default.conf /etc/nginx/sites-available/default
-RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-RUN rm -rf /etc/nginx/conf.d/default.conf
-
-# Supervisor configuration
-RUN mkdir -p docker/supervisor # Créer le dossier si non existant
-COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Expose port 80 for Nginx
+# Expose port 80 for Apache
 EXPOSE 80
 
-# Start Supervisor to run Nginx and PHP-FPM
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Start Apache and PHP-FPM
+CMD ["apache2ctl", "-D", "FOREGROUND"]
