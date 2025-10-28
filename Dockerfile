@@ -22,17 +22,18 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy application files
 COPY . .
+RUN ls -la /workspace
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
 # Apache configuration
-COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/apache/000-default.conf /etc/apache2/sites-available/laravel.conf
 RUN a2dissite 000-default.conf
 RUN a2enmod rewrite
 RUN a2enmod proxy_fcgi
 RUN a2enmod setenvif
-RUN a2ensite 000-default.conf
+RUN a2ensite laravel.conf
 
 # Set permissions
 RUN chown -R www-data:www-data /workspace \
