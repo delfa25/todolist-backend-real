@@ -27,9 +27,9 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /workspace \
+    && chmod -R 755 /workspace/storage \
+    && chmod -R 755 /workspace/bootstrap/cache
 
 # Nginx configuration
 RUN mkdir -p docker/nginx # Créer le dossier si non existant
