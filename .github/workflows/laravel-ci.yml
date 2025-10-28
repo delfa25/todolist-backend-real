@@ -87,14 +87,13 @@ jobs:
     - name: Build Docker Image
       run: docker build -t todolist-backend .
 
-    - name: Deploy to Railway
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    - name: Deploy to Koyeb
       run: |
-        echo "Deployment to Railway would happen here"
-        echo "Configure Railway service with:"
-        echo "- Connect to GitHub repository: delfa25/todolist-backend-real"
-        echo "- Build Command: composer install --no-dev --optimize-autoloader"
-        echo "- Start Command: php artisan serve --host=0.0.0.0 --port=8000"
+        echo "Deployment to Koyeb would happen here"
+        echo "To deploy to Koyeb, connect your GitHub repository to Koyeb directly."
+        echo "- Repository: delfa25/todolist-backend-real"
+        echo "- Build Type: Dockerfile"
+        echo "- Dockerfile Path: todolist-backend-real/Dockerfile (or adjust if your project structure differs)"
         echo "- Environment Variables: Set DB_* variables for production, APP_KEY"
-        echo "- Run 'php artisan migrate --force' in Railway console after deploy"
+        echo "- After initial deployment, run 'php artisan migrate --force' via Koyeb console or a post-deploy hook."
+
