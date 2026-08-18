@@ -101,7 +101,3 @@ Le projet inclut un workflow GitHub Actions complet :
    - `DB_USERNAME=your-username`
    - `DB_PASSWORD=your-password`
 3. Déployez automatiquement
-
-## 📄 Licence
-
-Ce projet est sous licence MIT.
